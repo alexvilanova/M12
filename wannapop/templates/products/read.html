@@ -1,0 +1,17 @@
+{% extends '_template.html' %}
+{% block content %}
+
+<h3>Producte {{ product.id }}</h3>
+<a href="/products/update/{{ product.id }}">Modificar producte</a>
+<br />
+<a href="/products/delete/{{ product.id }}">Esborrar producte</a>
+<ul>
+   <li>Nom: {{ product.title }}</li>
+   <li>Descripció: {{ product.description }}</li>
+   <li>Preu: {{ product.price }}</li>
+   <li>Categoria: {{ category.name }} </li>
+</ul>
+<p><img src="/static/products/{{ product.photo }}" alt="{{ product.title }}" /></p>
+<a href="/products/list">&#x3c;&#x3c; Tornar al llistat de productes</a>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+body {
+    background-color: lightgoldenrodyellow;
+}
+
+table {
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid red;
+}
+
+.messages .error {
+    color: red;
+}
+
+.messages .success {
+    color: green;
+}

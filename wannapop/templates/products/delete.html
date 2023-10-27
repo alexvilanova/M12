@@ -1,0 +1,20 @@
+{% extends '_template.html' %}
+{% from "_formhelpers.html" import render_errors %}
+{% block content %}
+
+<h3>Producte {{ product.id }}</h3>
+<ul>
+    <li>Nom: {{ product.title }}</li>
+    <li>Descripció: {{ product.description }}</li>
+    <li>Preu: {{ product.price }}</li>
+</ul>
+<p><img src="/static/products/{{ product.photo }}" alt="{{ product.title }}" /></p>
+<p>Confirma que vols esborrar aquest product:</p>
+<form action="/products/delete/{{ product.id }}" method="POST">
+    {{ form.csrf_token }}
+    <p>{{ form.submit(value="ESBORRAR") }}</p>
+    {{ render_errors(form) }}
+</form>
+<a href="/products/list">&#x3c;&#x3c; Tornar al llistat de productes</a>
+
+{% endblock %}

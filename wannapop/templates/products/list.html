@@ -1,0 +1,24 @@
+{% extends '_template.html' %}
+{% block content %}
+
+<h3>Productes</h3>
+<table>
+	<tr>
+		<th>ID</th>
+		<th>NOM</th>
+		<th>PREU</th>
+		<th>CATEGORIA</th>
+	</tr>
+
+	{% for (product, category) in products_with_category %}
+	<tr>
+		<td><a href="/products/read/{{ product.id }}">{{ product.id }}</a></td>
+		<td><a href="/products/read/{{ product.id }}">{{ product.title }}</a></td>
+		<td><a href="/products/read/{{ product.id }}">{{ product.price }}</a></td>
+		<td><a href="/products/read/{{ product.id }}">{{ category.name }}</a></td>
+	</tr>
+	{% endfor %}
+</table>
+<a href="/products/create">Crear un nou producte</a>
+
+{% endblock %}

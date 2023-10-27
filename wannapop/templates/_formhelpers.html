@@ -1,0 +1,9 @@
+{% macro render_errors(form) %}
+    {% for field, errors in form.errors.items() %}
+    {% if errors %}
+    <div class="messages">
+    <p class="error">{{ form[field].label }}: {{ ', '.join(errors) }}</p>
+    </div>
+    {% endif %}
+    {% endfor %}
+{% endmacro %}

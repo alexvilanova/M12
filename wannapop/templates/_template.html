@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ca">
+
+<head>
+   <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <title>Wannapop</title>
+   <link href="/static/css/wannapop.css" rel="stylesheet">
+</head>
+
+<body>
+   <h2>Wannapop</h2>
+   <hr />
+   {% with messages = get_flashed_messages(with_categories=true) %}
+   {% if messages %}
+      <div class="messages">
+      {% for category, message in messages %}
+         <p class="{{ category }}">{{ message }}</p>
+      {% endfor %}
+      </div>
+   {% endif %}
+   {% endwith %}
+   <!-- START CONTENT -->
+   {% block content %} {% endblock %}
+   <!-- END CONTENT -->
+   <hr />
+</body>
+
+</html>

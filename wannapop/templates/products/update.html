@@ -1,0 +1,20 @@
+{% extends '_template.html' %}
+{% from "_formhelpers.html" import render_errors %}
+{% block content %}
+
+<h3>Producte {{ product_id }}</h3>
+
+<form action="/products/update/{{ product_id }}" method="POST" enctype="multipart/form-data">
+   {{ form.csrf_token }}
+   <p>{{ form.title.label }}: {{ form.title() }}</p>
+   <p>{{ form.description.label }}: {{ form.description() }}</p>
+   <p>{{ form.photo_file.label }}: {{ form.photo_file() }}</p>
+   <p>{{ form.price.label }}: {{ form.price() }}</p>
+   <p>{{ form.category_id.label }}: {{ form.category_id() }}</p>
+   <p>{{ form.submit(value="MODIFICAR") }}</p>
+   {{ render_errors(form) }}
+</form>
+
+<a href="/products/list">&#x3c;&#x3c; Tornar al llistat de productes</a>
+
+{% endblock %}
