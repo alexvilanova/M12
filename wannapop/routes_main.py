@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash,current_app
 from .models import Product, Category
 from .forms import ProductForm, DeleteForm
 from werkzeug.utils import secure_filename
@@ -111,9 +111,8 @@ def product_delete(product_id):
         return render_template('products/delete.html', form = form, product = product)
 
 
-__uploads_folder = os.path.abspath(os.path.dirname(__file__)) + "/static/products/"
 
-def __manage_photo_file(photo_file):
+def __manage_photo_file(photo_file):    
     # si hi ha fitxer
     if photo_file.data:
         filename = photo_file.data.filename.lower()
@@ -122,7 +121,7 @@ def __manage_photo_file(photo_file):
         if filename.endswith(('.png', '.jpg', '.jpeg')):
             # M'asseguro que el nom del fitxer és únic per evitar col·lissions
             unique_filename = str(uuid.uuid4())+ "-" + secure_filename(filename)
-            photo_file.data.save(__uploads_folder + unique_filename)
+            photo_file.data.save(current_app.config['UPLOADS_FOLDER'] + unique_filename)
             return unique_filename
 
     return None

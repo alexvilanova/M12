@@ -1,36 +1,35 @@
-# 2daw-m12-p1-s0-solution
-
-Proposta de solució de l'sprint 0 del projecte 1 dins del mòdul de projecte (M12) de 2n de DAW.
 
 ## Setup
 
 ### Python Virtual Environment
 
-Crea l'entorn:
+Crear entorno:
 
     python3 -m venv .venv
 
-Activa'l:
+Activarlo:
 
     source .venv/bin/activate
 
-Instal·la el requisits:
+Instalar los requisitos:
 
     pip install -r requirements.txt
 
-Per a generar el fitxer de requiriments:
+Para generar archivo con requisitos:
 
     pip freeze > requirements.txt
 
-Per desactivar l'entorn:
+Para detener entorno:
 
     deactivate
 
-### Base de dades
+### Configuración
 
-La base de dades [SQLite](https://www.sqlite.org) s'ha de dir `database.db`. S'ha creat amb l'script [database.sql](./database.sql).
+Debes configurar el archivo .env con los datos solicitados
 
-## Run des de terminal
+    cp .env-example .env
+
+## Ejecutar desde terminal
 
 Executa:
 
@@ -40,31 +39,24 @@ I obre un navegador a l'adreça: [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
 Aquesta comanda executa el codi de `wsgi.py` 
 
-## Debug amb Visual Code
+## Importar datos generados a BD
 
-Des de l'opció de `Run and Debug`, crea un fitxer anomenat `launch.json` amb el contingut següent:
+1. **Generar datos con Mockaroo:**
 
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "WANNAPOP",
-            "type": "python",
-            "request": "launch",
-            "module": "flask",
-            "env": {
-                "FLASK_APP": "wsgi.py",
-                "FLASK_DEBUG": "1"
-            },
-            "args": [
-                "run",
-                "--no-debugger",
-                "--no-reload"
-            ],
-            "jinja": true,
-            "justMyCode": true
-        }
-    ]
-}
-```
+   - Ve a [Mockaroo](https://mockaroo.com/).
+   - Crea un esquema de datos que coincida con la estructura de tu tabla de SQLite.
+   - Genera datos de ejemplo y descárgalos en formato CSV.
+
+2. **Abrir DB Browser for SQLite:**
+
+   - Descarga e instala [DB Browser for SQLite](https://sqlitebrowser.org/) si aún no lo tienes.
+
+3. **Importar datos de Mockaroo:**
+
+   - Abre la base de datos existente
+   - Selecciona la pestaña "File" en la parte superior izquierda.
+   - Elige "Import" en el menú desplegable.
+   - Selecciona el archivo CSV que descargaste de Mockaroo.
+   - Configura las opciones de importación, como el nombre de la tabla de destino y las opciones de delimitador si es necesario.
+   - Haz clic en "OK" para iniciar la importación.
+
