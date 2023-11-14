@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash,current_app
 from .models import Product, Category
+from flask_login import current_user, login_required
 from .forms import ProductForm, DeleteForm, LoginForm, RegistrationForm
 from werkzeug.utils import secure_filename
 from . import db_manager as db
@@ -13,19 +14,11 @@ main_bp = Blueprint(
 
 @main_bp.route('/')
 def init():
-    return redirect(url_for('main_bp.product_list'))
-    # return render_template('layout.html')
+    if current_user.is_authenticated:
+        return redirect(url_for('main_bp.product_list'))
+    else:
+        return redirect(url_for("auth_bp.login"))
 
-@main_bp.route('/login', methods = ['GET', 'POST'])
-def login():
-    form = LoginForm()
-    return render_template('auth/login.html', form=form)
-
-
-@main_bp.route('/register', methods = ['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    return render_template('auth/register.html', form=form)
 
 @main_bp.route('/products/list')
 def product_list():

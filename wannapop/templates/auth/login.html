@@ -6,11 +6,11 @@
 
 {% block content %}
 <div class="mx-auto p-8" style="max-width:1400px;">
-    <form method="post" class="max-w mx-auto bg-white p-8 border border-gray-300 rounded-md shadow-md">
+    <form action="/login" method="post" class="max-w mx-auto bg-white p-8 border border-gray-300 rounded-md shadow-md">
         {{ form.hidden_tag() }}
         <div class="mb-4">
-          {{ form.username.label(class="block text-gray-700 text-sm font-bold mb-2") }}
-          {{ form.username(class="form-input w-full px-4 py-2 border border-gray-300 leading-tight rounded-md focus:outline-none focus:shadow-outline-blue") }}
+          {{ form.email.label(class="block text-gray-700 text-sm font-bold mb-2") }}
+          {{ form.email(class="form-input w-full px-4 py-2 border border-gray-300 leading-tight rounded-md focus:outline-none focus:shadow-outline-blue") }}
         </div>
         <div class="mb-4">
           {{ form.password.label(class="block text-gray-700 text-sm font-bold mb-2") }}
@@ -19,7 +19,7 @@
         {{ form.submit(class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue") }}
       </form>    
       <div class="mt-4 text-center text-gray-700 text-sm">
-        ¿No tienes una cuenta? <a href="{{ url_for('main_bp.register') }}" class="text-blue-500">Regístrate aquí</a>.
+        ¿No tienes una cuenta? <a href="{{ url_for('auth_bp.register') }}" class="text-blue-500">Regístrate aquí</a>.
     </div>    
 </div>
 {% endblock %}
