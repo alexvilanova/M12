@@ -52,7 +52,8 @@ def register():
             new_user = User(
                 name=form.name.data,
                 email=email,
-                password=generate_password_hash(form.password.data, method='sha256')
+                password=generate_password_hash(form.password.data, method='sha256'),
+                role='wanner'
                 )
             
             # Guarda el nuevo usuario en la base de datos
@@ -63,6 +64,12 @@ def register():
             return redirect(url_for('auth_bp.login'))
 
     return render_template('auth/register.html', form=form)
+
+@auth_bp.route('/profile')
+@login_required
+def profile():
+    user = User.query.get(current_user.id)
+    return render_template('profile.html', user=user)
 
 @login_manager.user_loader
 def load_user(email):

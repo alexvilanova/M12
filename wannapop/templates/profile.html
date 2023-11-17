@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block header %}
+  <h1 class="text-center text-4xl font-bold mt-8 mb-4">{% block title %}Perfil{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="mx-auto p-8" style="max-width:1400px;">
+    <div class="max-w mx-auto bg-white p-8 border border-gray-300 rounded-md shadow-md">
+        <p class="block text-gray-700 text-sm font-bold mb-2">Nombre: {{ user.name }}</p>
+        <p class="block text-gray-700 text-sm font-bold mb-2">Correo: {{ user.email }}</p>
+        <p class="block text-gray-700 text-sm font-bold mb-2">Rol del usuario: {{ user.role }}</p>
+        <p class="block text-gray-700 text-sm font-bold mb-2">Fecha de alta: {{ user.created.strftime('%d/%m/%Y %H:%M:%S') }}</p>
+    </div>
+    <div class="mt-4 text-center text-gray-700 text-sm">
+        ¿Quieres realizar cambios en tu perfil? <a href="" class="text-blue-500">Editar perfil</a>.
+    </div>
+</div>
+{% endblock %}

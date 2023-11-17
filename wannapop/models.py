@@ -27,6 +27,9 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String, nullable=False)
     email = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
+    role = db.Column(db.String, nullable=False, default='wanner')
+    created = db.Column(db.DateTime, server_default=func.now())
+    updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
     def get_id(self):
         return self.email
