@@ -21,7 +21,6 @@ def login():
     if form.validate_on_submit(): # si s'ha enviat el formulari via POST i és correcte
         email = form.email.data
         plain_text_password = form.password.data
-
         user = load_user(email)
         if user and check_password_hash(user.password, plain_text_password):
             # aquí és crea la cookie
