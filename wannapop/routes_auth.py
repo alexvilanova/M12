@@ -4,7 +4,7 @@ from . import login_manager
 from .models import User
 from .forms import LoginForm, RegistrationForm
 from . import db_manager as db
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 # Blueprint
 auth_bp = Blueprint(
@@ -36,9 +36,34 @@ def login():
     
     return render_template('auth/login.html', form = form)
 
-@auth_bp.route('/register', methods = ['GET', 'POST'])
+@auth_bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegistrationForm()
+
+    if form.validate_on_submit():
+        email = form.email.data
+
+        # Verifica si el correo ya está en uso
+        existing_user = db.session.query(User).filter_by(email=email).first()
+
+        if existing_user:
+            flash('El correo ya está en uso', 'error')
+            return render_template('auth/register.html', form=form)
+        else:
+            # Crea el nuevo usuario y almacena con generate_password_hash
+            new_user = User(
+                name=form.name.data,
+                email=email,
+                password=generate_password_hash(form.password.data, method='sha256')
+                )
+            
+            # Guarda el nuevo usuario en la base de datos
+            db.session.add(new_user)
+            db.session.commit()
+
+            flash('Te has registrado con éxito. Por favor, inicia sesión.', 'success')
+            return redirect(url_for('auth_bp.login'))
+
     return render_template('auth/register.html', form=form)
 
 @login_manager.user_loader
