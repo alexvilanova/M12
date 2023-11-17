@@ -44,7 +44,6 @@ def register():
 
         # Verifica si el correo ya está en uso
         existing_user = db.session.query(User).filter_by(email=email).first()
-
         if existing_user:
             flash('El correo ya está en uso', 'error')
             return render_template('auth/register.html', form=form)
