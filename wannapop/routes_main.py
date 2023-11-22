@@ -3,9 +3,11 @@ from .models import Product, Category
 from flask_login import current_user, login_required
 from .forms import ProductForm, DeleteForm, LoginForm, RegistrationForm
 from werkzeug.utils import secure_filename
+from .helper_role import wanner_permission
 from . import db_manager as db
 import uuid
 import os
+
 
 # Blueprint
 main_bp = Blueprint(
@@ -25,11 +27,12 @@ def init():
 def product_list():
     # select amb join que retorna una llista dwe resultats
     products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
-    
+
     return render_template('layout.html', products_with_category = products_with_category)
 
 @main_bp.route('/products/create', methods = ['POST', 'GET'])
 @login_required
+@wanner_permission.require(http_exception=403)
 def product_create(): 
 
     # select que retorna una llista de resultats
