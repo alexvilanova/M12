@@ -3,7 +3,7 @@ from .models import Product, Category
 from flask_login import current_user, login_required
 from .forms import ProductForm, DeleteForm, LoginForm, RegistrationForm
 from werkzeug.utils import secure_filename
-from .helper_role import wanner_permission
+from .helper_role import wanner_permission, admin_permission, moderator_permission, edit_permission, view_permission, create_permission, delete_permission, moderator_permission
 from . import db_manager as db
 import uuid
 import os
@@ -16,10 +16,10 @@ main_bp = Blueprint(
 
 @main_bp.route('/')
 def init():
-    # if current_user.is_authenticated:
-    #     return redirect(url_for('main_bp.product_list'))
-    # else:
-    #     return redirect(url_for("auth_bp.login"))
+    if current_user.is_authenticated:
+        return redirect(url_for('main_bp.product_list'))
+    else:
+        return redirect(url_for("auth_bp.login"))
     return redirect(url_for('main_bp.product_list'))
 
 
@@ -32,7 +32,7 @@ def product_list():
 
 @main_bp.route('/products/create', methods = ['POST', 'GET'])
 @login_required
-@wanner_permission.require(http_exception=403)
+@create_permission.require(http_exception=403)
 def product_create(): 
 
     # select que retorna una llista de resultats
@@ -67,6 +67,8 @@ def product_create():
         return render_template('products/create.html', form = form)
 
 @main_bp.route('/products/read/<int:product_id>')
+@login_required
+@view_permission.require(http_exception=403)
 def product_read(product_id):
     # select amb join i 1 resultat
     (product, category) = db.session.query(Product, Category).join(Category).filter(Product.id == product_id).one()
@@ -75,10 +77,15 @@ def product_read(product_id):
 
 @main_bp.route('/products/update/<int:product_id>',methods = ['POST', 'GET'])
 @login_required
+@edit_permission.require(http_exception=403)
 def product_update(product_id):
     # select amb 1 resultat
     product = db.session.query(Product).filter(Product.id == product_id).one()
 
+    if current_user.id != product.seller_id:
+        flash('No tienes permisos para editar este producto.', 'error')
+        return redirect(url_for('main_bp.product_read', product_id=product_id))
+    
     # select que retorna una llista de resultats
     categories = db.session.query(Category).order_by(Category.id.asc()).all()
 
@@ -107,6 +114,7 @@ def product_update(product_id):
 
 @main_bp.route('/products/delete/<int:product_id>',methods = ['GET', 'POST'])
 @login_required
+@delete_permission.require(http_exception=403)
 def product_delete(product_id):
     # select amb 1 resultat
     product = db.session.query(Product).filter(Product.id == product_id).one()

@@ -2,6 +2,7 @@ from flask import Blueprint, redirect, render_template, url_for, flash
 from flask_login import current_user, login_user, login_required, logout_user
 from . import login_manager
 from .models import User
+from .helper_role import notify_identity_changed
 from .forms import LoginForm, RegistrationForm
 from . import db_manager as db
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -22,9 +23,11 @@ def login():
         email = form.email.data
         plain_text_password = form.password.data
         user = load_user(email)
+        
         if user and check_password_hash(user.password, plain_text_password):
             # aquí és crea la cookie
             login_user(user)
+            notify_identity_changed()
             flash("Se ha iniciado sesión correctamente", "success")
             return redirect(url_for("main_bp.init"))
 
