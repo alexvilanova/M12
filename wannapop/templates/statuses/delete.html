@@ -1,0 +1,17 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Estat {{ status.id }}
+{% endblock %}
+
+{% block content %}
+
+<p>Confirmes que vols eliminar la estat "{{ status.name }}"?</p>
+
+<form action="/statuses/delete/{{ status.id }}" method="POST">
+    {{ form.csrf_token }}
+    <a class="btn btn-outline-dark btn-xl" href="/statuses/list">&#x3c;&#x3c; Tornar al llistat</a>
+    {{ form.submit(value="ESBORRAR",class_="btn btn-danger btn-xl") }}
+</form>
+{% endblock %}

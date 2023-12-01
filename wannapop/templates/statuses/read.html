@@ -1,0 +1,17 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Estat {{ status.id }}
+{% endblock %}
+
+{% block content %}
+<ul>
+    <li>Nom: {{ status.name }}</li>
+    <li>Slug: {{ status.slug }}</li>
+</ul>
+
+<a class="btn btn-outline-dark btn-xl" href="/statuses/list">&#x3c;&#x3c; Tornar al llistat</a>
+<a class="btn btn-warning btn-xl" href="/statuses/update/{{ status.id }}">Modificar estat</a>
+<a class="btn btn-danger btn-xl" href="/statuses/delete/{{ status.id }}">Esborrar estat</a>
+
+{% endblock %}

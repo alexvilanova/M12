@@ -1,0 +1,17 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Categoria {{ category.id }}
+{% endblock %}
+
+{% block content %}
+
+<p>Confirmes que vols eliminar la categoria "{{ category.name }}"?</p>
+
+<form action="/categories/delete/{{ category.id }}" method="POST">
+    {{ form.csrf_token }}
+    <a class="btn btn-outline-dark btn-xl" href="/categories/list">&#x3c;&#x3c; Tornar al llistat</a>
+    {{ form.submit(value="ESBORRAR",class_="btn btn-danger btn-xl") }}
+</form>
+{% endblock %}

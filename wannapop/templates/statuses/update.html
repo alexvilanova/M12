@@ -1,0 +1,24 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Estat {{ status_id }}
+{% endblock %}
+
+{% block content %}
+<h3>Introdueix les dades</h3>
+<form action="/statuses/update/{{ status_id }}" method="POST" enctype="multipart/form-data">
+   {{ form.csrf_token }}
+   <div class="form-floating mb-3">
+      {{ form.name(class_="form-control") }}
+      {{ form.name.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.slug(class_="form-control") }}
+      {{ form.slug.label }}
+   </div>
+   <a class="btn btn-outline-dark btn-xl" href="/statuses/list">&#x3c;&#x3c; Tornar al llistat</a>
+   {{ form.submit(value="MODIFICAR", class_="btn btn-primary btn-xl") }}
+   {{ render_errors(form) }}
+</form>
+{% endblock %}

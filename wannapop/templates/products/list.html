@@ -1,24 +1,45 @@
-{% extends '_template.html' %}
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Productes
+{% endblock %}
+
 {% block content %}
-
-<h3>Productes</h3>
-<table>
-	<tr>
-		<th>ID</th>
-		<th>NOM</th>
-		<th>PREU</th>
-		<th>CATEGORIA</th>
-	</tr>
-
-	{% for (product, category) in products_with_category %}
-	<tr>
-		<td><a href="/products/read/{{ product.id }}">{{ product.id }}</a></td>
-		<td><a href="/products/read/{{ product.id }}">{{ product.title }}</a></td>
-		<td><a href="/products/read/{{ product.id }}">{{ product.price }}</a></td>
-		<td><a href="/products/read/{{ product.id }}">{{ category.name }}</a></td>
-	</tr>
-	{% endfor %}
+<table class="table table-bordered table-striped" style="background-color: #fefefe;">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>NOM</th>
+			<th>PREU</th>
+			<th>CATEGORIA</th>
+			<th colspan="3">Accions</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for (product, category) in products_with_category %}
+		<tr class="{{ 'own' if product.seller_id == current_user.id }}">
+			<td><a href="/products/read/{{ product.id }}" alt="Visualitzar">{{ product.id }}</a></td>
+			<td>{{ product.title }}</td>
+			<td>{{ product.price }}</td>
+			<td>{{ category.name }}</td>
+			<td>
+				<a href="/products/read/{{ product.id }}" alt="Visualitzar">👁️</a>
+			</td>
+			<td>
+				{% if current_user.is_action_allowed_to_product(Action.products_update, product) %}
+				<a href="/products/update/{{ product.id }}" alt="Editar">📝</a>
+				{% endif %}
+			</td>
+			<td>
+				{% if current_user.is_action_allowed_to_product(Action.products_delete, product) %}
+				<a href="/products/delete/{{ product.id }}" alt="Eliminar">❌</a>
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+	</tbody>
 </table>
-<a href="/products/create">Crear un nou producte</a>
-
+{% if current_user.is_action_allowed_to_product(Action.products_create) %}
+<a class="btn btn-secondary btn-xl" href="/products/create">Crear un nou producte</a>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Registre
+{% endblock %}
+
+{% block content %}
+<h3>Registra't a Wannapop!</h3>
+<form action="/register" method="POST">
+   {{ form.csrf_token }}
+   <div class="form-floating mb-3">
+      {{ form.name(class_="form-control", placeholder_="Introdueix nom d'usuari/a...") }}
+      {{ form.name.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.email(class_="form-control", placeholder_="Introdueix correu electrònic...") }}
+      {{ form.email.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.password(class_="form-control", placeholder_="Introdueix contrasenya...") }}
+      {{ form.password.label }}
+   </div>
+   {{ form.submit(value="REGISTRA'T",class_="btn btn-primary btn-xl") }}
+   {{ render_errors(form) }}
+</form>
+{% endblock %}

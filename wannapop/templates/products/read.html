@@ -1,17 +1,27 @@
-{% extends '_template.html' %}
-{% block content %}
+{% extends 'layouts/_base.html' %}
 
-<h3>Producte {{ product.id }}</h3>
-<a href="/products/update/{{ product.id }}">Modificar producte</a>
-<br />
-<a href="/products/delete/{{ product.id }}">Esborrar producte</a>
+{% block title %}
+Producte {{ product.id }}
+{% endblock %}
+
+{% block content %}
 <ul>
-   <li>Nom: {{ product.title }}</li>
-   <li>Descripció: {{ product.description }}</li>
-   <li>Preu: {{ product.price }}</li>
-   <li>Categoria: {{ category.name }} </li>
+    <li>Nom: {{ product.title }}</li>
+    <li>Descripció: {{ product.description }}</li>
+    <li>Preu: {{ product.price }}</li>
+    <li>Categoria: {{ category.name }} </li>
+    <li>Estat: {{ status.name }} </li>
 </ul>
 <p><img src="/static/products/{{ product.photo }}" alt="{{ product.title }}" /></p>
-<a href="/products/list">&#x3c;&#x3c; Tornar al llistat de productes</a>
+
+<a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
+
+{% if current_user.is_action_allowed_to_product(Action.products_update, product) %}
+<a class="btn btn-warning btn-xl" href="/products/update/{{ product.id }}">Modificar producte</a>
+{% endif %}
+
+{% if current_user.is_action_allowed_to_product(Action.products_delete, product) %}
+<a class="btn btn-danger btn-xl" href="/products/delete/{{ product.id }}">Esborrar producte</a>
+{% endif %}
 
 {% endblock %}

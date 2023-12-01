@@ -1,0 +1,25 @@
+{
+    "model": "wannapop.models.Category",
+    "data": [
+        {
+            "name": "Vehicles",
+            "slug": "vehicles"
+        },
+        {
+            "name": "Esports",
+            "slug": "esports"
+        },
+        {
+            "name": "Jardí",
+            "slug": "jardi"
+        },
+        {
+            "name": "Videojocs",
+            "slug": "videojocs"
+        },
+        {
+            "name": "Altres",
+            "slug": "altres"
+        }
+    ]
+}

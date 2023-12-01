@@ -1,19 +1,26 @@
-{% extends 'layout.html' %}
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
 
-{% block header %}
-  <h1 class="text-center text-4xl font-bold mt-8 mb-4">{% block title %}Perfil{% endblock %}</h1>
+{% block title %}
+Profile
 {% endblock %}
 
 {% block content %}
-<div class="mx-auto p-8" style="max-width:1400px;">
-    <div class="max-w mx-auto bg-white p-8 border border-gray-300 rounded-md shadow-md">
-        <p class="block text-gray-700 text-sm font-bold mb-2">Nombre: {{ user.name }}</p>
-        <p class="block text-gray-700 text-sm font-bold mb-2">Correo: {{ user.email }}</p>
-        <p class="block text-gray-700 text-sm font-bold mb-2">Rol del usuario: {{ user.role }}</p>
-        <p class="block text-gray-700 text-sm font-bold mb-2">Fecha de alta: {{ user.created.strftime('%d/%m/%Y %H:%M:%S') }}</p>
+<form action="/profile" method="POST">
+    {{ form.csrf_token }}
+    <div class="form-floating mb-3">
+       {{ form.name(class_="form-control", placeholder_="Nom d'usuari/a") }}
+       {{ form.name.label }}
     </div>
-    <div class="mt-4 text-center text-gray-700 text-sm">
-        ¿Quieres realizar cambios en tu perfil? <a href="" class="text-blue-500">Editar perfil</a>.
+    <div class="form-floating mb-3">
+       {{ form.email(class_="form-control", placeholder_="Correu electrònic") }}
+       {{ form.email.label }}
     </div>
-</div>
+    <div class="form-floating mb-3">
+       {{ form.password(class_="form-control", placeholder_="La mateixa contrasenya") }}
+       {{ form.password.label }}
+    </div>
+    {{ form.submit(value="ACTUALITZA",class_="btn btn-primary btn-xl") }}
+    {{ render_errors(form) }}
+ </form>
 {% endblock %}

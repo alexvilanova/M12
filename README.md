@@ -1,35 +1,40 @@
+# 2daw-m12-p1-solution
+
+Proposta de solució del projecte 1 dins del mòdul de projecte (M12) de 2n de DAW.
 
 ## Setup
 
 ### Python Virtual Environment
 
-Crear entorno:
+Crea l'entorn:
 
     python3 -m venv .venv
 
-Activarlo:
+Activa'l:
 
     source .venv/bin/activate
 
-Instalar los requisitos:
+Instal·la el requisits:
 
     pip install -r requirements.txt
 
-Para generar archivo con requisitos:
+Per a generar el fitxer de requiriments:
 
     pip freeze > requirements.txt
 
-Para detener entorno:
+Per desactivar l'entorn:
 
     deactivate
 
-### Configuración
+### Base de dades
 
-Debes configurar el archivo .env con los datos solicitados
+Crea una base de dades SQLite a partir de l'script [0_tables.sql](./sqlite/0_tables.sql). Tens una d'exemple creada amb les dades del fitxer [1_mock_data.sql](./sqlite/1_mock_data.sql). Hi ha tres usuaris de prova (un `admin` i dos `wanner`) i tots tres tenen com a contrasenya `patata`.
 
-    cp .env-example .env
+### Fitxer de configuració
 
-## Ejecutar desde terminal
+Crea un fitxer `.env` amb els paràmetres de configuració. Pots fer servir el fitxer [.env.exemple](./.env.exemple).
+
+## Run des de terminal
 
 Executa:
 
@@ -37,26 +42,35 @@ Executa:
 
 I obre un navegador a l'adreça: [http://127.0.0.1:5000](http://127.0.0.1:5000).
 
-Aquesta comanda executa el codi de `wsgi.py` 
+Aquesta comanda executa el codi de [wsgi.py](./wsgi.py).
 
-## Importar datos generados a BD
+Per autenticarte, consula al fitxer [database.sql](./sqlite/database.sql) els usuaris de prova disponibles.
 
-1. **Generar datos con Mockaroo:**
+## Debug amb Visual Code
 
-   - Ve a [Mockaroo](https://mockaroo.com/).
-   - Crea un esquema de datos que coincida con la estructura de tu tabla de SQLite.
-   - Genera datos de ejemplo y descárgalos en formato CSV.
+Des de l'opció de `Run and Debug`, crea un fitxer anomenat `launch.json` amb el contingut següent:
 
-2. **Abrir DB Browser for SQLite:**
-
-   - Descarga e instala [DB Browser for SQLite](https://sqlitebrowser.org/) si aún no lo tienes.
-
-3. **Importar datos de Mockaroo:**
-
-   - Abre la base de datos existente
-   - Selecciona la pestaña "File" en la parte superior izquierda.
-   - Elige "Import" en el menú desplegable.
-   - Selecciona el archivo CSV que descargaste de Mockaroo.
-   - Configura las opciones de importación, como el nombre de la tabla de destino y las opciones de delimitador si es necesario.
-   - Haz clic en "OK" para iniciar la importación.
-
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "WANNAPOP",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "wsgi.py",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                "run",
+                "--no-debugger",
+                "--no-reload"
+            ],
+            "jinja": true,
+            "justMyCode": true
+        }
+    ]
+}
+```

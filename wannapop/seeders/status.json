@@ -1,0 +1,25 @@
+{
+    "model": "wannapop.models.Status",
+    "data": [
+        {
+            "name": "Com nou",
+            "slug": "com-nou"
+        },
+        {
+            "name": "En bon estat",
+            "slug": "en-bon-estat"
+        },
+        {
+            "name": "Acceptable",
+            "slug": "acceptable"
+        },
+        {
+            "name": "Desgastat",
+            "slug": "degastat"
+        },
+        {
+            "name": "Requereix reparació",
+            "slug": "a-reparar"
+        }
+    ]
+}

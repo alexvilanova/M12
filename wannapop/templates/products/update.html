@@ -1,20 +1,40 @@
-{% extends '_template.html' %}
-{% from "_formhelpers.html" import render_errors %}
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Producte {{ product_id }}
+{% endblock %}
+
 {% block content %}
-
-<h3>Producte {{ product_id }}</h3>
-
+<h3>Introdueix les dades</h3>
 <form action="/products/update/{{ product_id }}" method="POST" enctype="multipart/form-data">
    {{ form.csrf_token }}
-   <p>{{ form.title.label }}: {{ form.title() }}</p>
-   <p>{{ form.description.label }}: {{ form.description() }}</p>
-   <p>{{ form.photo_file.label }}: {{ form.photo_file() }}</p>
-   <p>{{ form.price.label }}: {{ form.price() }}</p>
-   <p>{{ form.category_id.label }}: {{ form.category_id() }}</p>
-   <p>{{ form.submit(value="MODIFICAR") }}</p>
+   <div class="form-floating mb-3">
+      {{ form.title(class_="form-control") }}
+      {{ form.title.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.description(class_="form-control") }}
+      {{ form.description.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.photo_file(class_="form-control") }}
+      {{ form.photo_file.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.price(class_="form-control") }}
+      {{ form.price.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.category_id(class_="form-control") }}
+      {{ form.category_id.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.status_id(class_="form-control") }}
+      {{ form.status_id.label }}
+   </div>
+   <a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
+   {{ form.submit(value="MODIFICAR", class_="btn btn-primary btn-xl") }}
    {{ render_errors(form) }}
 </form>
-
-<a href="/products/list">&#x3c;&#x3c; Tornar al llistat de productes</a>
-
 {% endblock %}

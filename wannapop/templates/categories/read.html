@@ -1,0 +1,17 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Categoria {{ category.id }}
+{% endblock %}
+
+{% block content %}
+<ul>
+    <li>Nom: {{ category.name }}</li>
+    <li>Slug: {{ category.slug }}</li>
+</ul>
+
+<a class="btn btn-outline-dark btn-xl" href="/categories/list">&#x3c;&#x3c; Tornar al llistat</a>
+<a class="btn btn-warning btn-xl" href="/categories/update/{{ category.id }}">Modificar categoria</a>
+<a class="btn btn-danger btn-xl" href="/categories/delete/{{ category.id }}">Esborrar categoria</a>
+
+{% endblock %}
