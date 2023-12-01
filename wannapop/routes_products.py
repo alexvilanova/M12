@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, abort
+from flask import Blueprint, render_template, redirect, url_for, flash, abort, current_app
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 from .models import Product, Category, Status
@@ -23,7 +23,8 @@ def templates_processor():
 def product_list():
     # select amb join que retorna una llista de resultats
     products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
-    
+    current_app.logger.debug(f"products_with_category = {products_with_category}")
+
     return render_template('products/list.html', products_with_category = products_with_category)
 
 @products_bp.route('/products/create', methods = ['POST', 'GET'])

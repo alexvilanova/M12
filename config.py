@@ -8,10 +8,10 @@ class Config:
     """Base config."""
     SECRET_KEY = environ.get('SECRET_KEY')
     SESSION_COOKIE_NAME = environ.get('SESSION_COOKIE_NAME')
+    DEBUG = environ.get('DEBUG', False)
 
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + path.join(basedir, environ.get('SQLITE_FILE_RELATIVE_PATH'))
     SQLALCHEMY_ECHO = environ.get('SQLALCHEMY_ECHO')
-
     MAIL_SUBJECT_PREFIX = environ.get('MAIL_SUBJECT_PREFIX')
     MAIL_SENDER_NAME = environ.get('MAIL_SENDER_NAME')
     MAIL_SENDER_ADDR = environ.get('MAIL_SENDER_ADDR')

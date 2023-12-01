@@ -3,11 +3,13 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_principal import Principal
 from .helper_mail import MailManager
+from flask_debugtoolbar import DebugToolbarExtension
 
 db_manager = SQLAlchemy()
 login_manager = LoginManager()
 principal_manager = Principal()
 mail_manager = MailManager()
+toolbar = DebugToolbarExtension()
 
 def create_app():
     # Construct the core app object
@@ -21,7 +23,9 @@ def create_app():
     db_manager.init_app(app)
     principal_manager.init_app(app)
     mail_manager.init_app(app)
-    
+    toolbar.init_app(app) # the toolbar is only enabled in debug mode
+
+
     with app.app_context():
         from . import commands, routes_main, routes_auth, routes_admin, routes_products, routes_category, routes_status
 
