@@ -53,8 +53,14 @@ def profile():
         if not something_change:
             flash("Cap canvi", "success")
         else:
-            # guardo els canvis a la bbdd
-            db.session.commit()
+            new_product.photo = "no_image.png"
+
+
+        # insert!
+        db.session.add(new_product)
+        db.session.commit()
+
+        # Enviar correo electrónico de bienvenida con el enlace de verificació
 
             if not current_user.verified:
                 # envio l'email!

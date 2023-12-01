@@ -67,6 +67,7 @@ class User(UserMixin, db.Model):
         
         # si hem arribat fins aquí, l'usuari té permisos
         return True
+import secrets
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -101,3 +102,12 @@ class BlockedUser(db.Model):
     admin_id = db.Column(db.Integer, nullable=False)
     message = db.Column(db.String(255), nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
+    updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+
+
+    def get_id(self):
+        return self.email
+    
+    def generate_email_token(self):
+        # Generar un token con la librería secrets
+        self.email_token = secrets.token_urlsafe(20)
