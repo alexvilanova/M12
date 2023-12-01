@@ -56,9 +56,12 @@ def product_create():
         else:
             new_product.photo = "no_image.png"
 
+
         # insert!
         db.session.add(new_product)
         db.session.commit()
+
+        # Enviar correo electrónico de bienvenida con el enlace de verificació
 
         # https://en.wikipedia.org/wiki/Post/Redirect/Get
         flash("Nou producte creat", "success")
