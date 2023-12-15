@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort, current_app
 from flask_login import current_user
 from werkzeug.utils import secure_filename
-from .models import Product, Category, Status
+from .models import Product, Category, Status, BlockedUser
 from .forms import ProductForm, DeleteForm
 from .helper_role import Action, perm_required
 from . import db_manager as db
@@ -31,39 +31,43 @@ def product_list():
 @perm_required(Action.products_create)
 def product_create(): 
 
-    # selects que retornen una llista de resultats
-    categories = db.session.query(Category).order_by(Category.id.asc()).all()
-    statuses = db.session.query(Status).order_by(Status.id.asc()).all()
+    blocked_user = BlockedUser.query.filter_by(user_id=current_user.id).first()
+    if not blocked_user:
+        # selects que retornen una llista de resultats
+        categories = db.session.query(Category).order_by(Category.id.asc()).all()
+        statuses = db.session.query(Status).order_by(Status.id.asc()).all()
 
-    # carrego el formulari amb l'objecte products
-    form = ProductForm()
-    form.category_id.choices = [(category.id, category.name) for category in categories]
-    form.status_id.choices = [(status.id, status.name) for status in statuses]
+        # carrego el formulari amb l'objecte products
+        form = ProductForm()
+        form.category_id.choices = [(category.id, category.name) for category in categories]
+        form.status_id.choices = [(status.id, status.name) for status in statuses]
 
-    if form.validate_on_submit(): # si s'ha fet submit al formulari
-        new_product = Product()
-        new_product.seller_id = current_user.id
+        if form.validate_on_submit(): # si s'ha fet submit al formulari
+            new_product = Product()
+            new_product.seller_id = current_user.id
 
-        # dades del formulari a l'objecte product
-        form.populate_obj(new_product)
+            # dades del formulari a l'objecte product
+            form.populate_obj(new_product)
 
-        # si hi ha foto
-        filename = __manage_photo_file(form.photo_file)
-        if filename:
-            new_product.photo = filename
-        else:
-            new_product.photo = "no_image.png"
+            # si hi ha foto
+            filename = __manage_photo_file(form.photo_file)
+            if filename:
+                new_product.photo = filename
+            else:
+                new_product.photo = "no_image.png"
 
-        # insert!
-        db.session.add(new_product)
-        db.session.commit()
+            # insert!
+            db.session.add(new_product)
+            db.session.commit()
 
-        # https://en.wikipedia.org/wiki/Post/Redirect/Get
-        flash("Nou producte creat", "success")
+            # https://en.wikipedia.org/wiki/Post/Redirect/Get
+            flash("Nou producte creat", "success")
+            return redirect(url_for('products_bp.product_list'))
+        else: # GET
+            return render_template('products/create.html', form = form)
+    else:
+        flash("Se te ha restringido la creación de productos", "danger")
         return redirect(url_for('products_bp.product_list'))
-    else: # GET
-        return render_template('products/create.html', form = form)
-
 @products_bp.route('/products/read/<int:product_id>')
 @perm_required(Action.products_read)
 def product_read(product_id):

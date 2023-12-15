@@ -6,6 +6,13 @@ Profile
 {% endblock %}
 
 {% block content %}
+
+{% if reason_for_block %}
+    <div class="alert alert-danger" role="alert">
+        Has sido bloqueado por {{ reason_for_block }}
+    </div>
+{% endif %}
+
 <form action="/profile" method="POST">
     {{ form.csrf_token }}
     <div class="form-floating mb-3">

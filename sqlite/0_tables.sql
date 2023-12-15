@@ -40,3 +40,12 @@ CREATE TABLE products (
 	FOREIGN KEY (status_id) REFERENCES statuses(id),
 	FOREIGN KEY (seller_id) REFERENCES users(id)
 );
+
+-- Crea la taula blocked_users
+CREATE TABLE blocked_users (
+    id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    admin_id INTEGER NOT NULL,
+    message VARCHAR(255) NOT NULL,
+    created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

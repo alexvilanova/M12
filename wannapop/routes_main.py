@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, flash
 from flask_login import current_user, login_required, logout_user
 from .forms import ProfileForm
 from . import db_manager as db, mail_manager
+from .models import BlockedUser
 import secrets
 
 # Blueprint
@@ -17,7 +18,18 @@ def init():
 @main_bp.route('/profile', methods=["GET", "POST"])
 @login_required
 def profile():
+    
+    # Comprueba si esta bloqueado
+    blocked_user = BlockedUser.query.filter_by(user_id=current_user.id).first()
+
+    if blocked_user:
+        reason_for_block = blocked_user.message
+    else:
+        reason_for_block = None
+
+    # Resto del código
     form = ProfileForm()
+    
     if form.validate_on_submit():
         something_change = False
         new_email = form.email.data
@@ -60,7 +72,7 @@ def profile():
         form.name.data = current_user.name
         form.email.data = current_user.email    
 
-        return render_template('profile.html', form = form)
+        return render_template('profile.html', form = form, reason_for_block=reason_for_block)
 
 @main_bp.app_errorhandler(403)
 def forbidden_access(e):

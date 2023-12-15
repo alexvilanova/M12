@@ -5,6 +5,7 @@ Usuaris
 {% endblock %}
 
 {% block content %}
+
 <table class="table table-bordered table-striped" style="background-color: #fefefe;">
 	<thead>
 		<tr>
@@ -12,6 +13,7 @@ Usuaris
 			<th>NOM</th>
 			<th>EMAIL</th>
 			<th>ROL</th>
+			<th colspan="2">ACCIONES</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -21,10 +23,16 @@ Usuaris
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.role }}</td>
+			<td>
+				{% if user.id in blocked_users %}
+					<a href="{{ url_for('admin_bp.unblock_user', user_id=user.id) }}">Unblock</a>
+				{% endif %}
+			</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
 <a class="btn btn-outline-dark btn-xl" href="/admin">&#x3c;&#x3c; Tornar la pàgina d'administració</a>
+<a class="btn btn-outline-dark btn-xl" href="{{ url_for('admin_bp.block_user') }}">Bloquear usuario</a>
 
 {% endblock %}

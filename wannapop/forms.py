@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, StringField, DecimalField, SubmitField, SelectField, FileField
-from wtforms.validators import DataRequired, NumberRange, InputRequired, Email
+from wtforms import PasswordField, StringField, DecimalField, SubmitField, SelectField, FileField, TextAreaField
+from wtforms.validators import DataRequired, NumberRange, InputRequired, Email, Length
 import decimal
 
 class LoginForm(FlaskForm):
@@ -80,6 +80,10 @@ class StatusForm(FlaskForm):
         validators = [DataRequired()]
     )
     submit = SubmitField()
+
+class BlockedUserForm(FlaskForm):
+    user_id = SelectField('User', coerce=int, choices=[], validators=[DataRequired()])
+    message = TextAreaField('Message', validators=[DataRequired(), Length(max=255)])
 
 # Formulari generic per esborrar i aprofitar la CSRF Protection
 class DeleteForm(FlaskForm):

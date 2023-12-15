@@ -1,0 +1,30 @@
+<!-- block_user.html -->
+
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Bloquear Usuario
+{% endblock %}
+
+{% block content %}
+
+<form method="POST" action="{{ url_for('admin_bp.block_user') }}">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        {{ form.user_id.label }}
+        {{ form.user_id(class="form-control") }}
+    </div>
+
+    <div class="form-group">
+        {{ form.message.label }}
+        {{ form.message(class="form-control", placeholder="Enter Message") }}
+        {% for error in form.message.errors %}
+            <small class="text-danger">{{ error }}</small>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
