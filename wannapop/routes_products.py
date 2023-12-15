@@ -30,7 +30,6 @@ def product_list():
 @products_bp.route('/products/create', methods = ['POST', 'GET'])
 @perm_required(Action.products_create)
 def product_create(): 
-
     blocked_user = BlockedUser.query.filter_by(user_id=current_user.id).first()
     if not blocked_user:
         # selects que retornen una llista de resultats
@@ -68,6 +67,7 @@ def product_create():
     else:
         flash("Se te ha restringido la creación de productos", "danger")
         return redirect(url_for('products_bp.product_list'))
+
 @products_bp.route('/products/read/<int:product_id>')
 @perm_required(Action.products_read)
 def product_read(product_id):
