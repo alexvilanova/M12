@@ -37,4 +37,8 @@ Producte {{ product_id }}
    {{ form.submit(value="MODIFICAR", class_="btn btn-primary btn-xl") }}
    {{ render_errors(form) }}
 </form>
+{% if product.banned %}
+   <p>Product is banned: {{ product.banned.reason }}</p>
+{% endif %}
+
 {% endblock %}

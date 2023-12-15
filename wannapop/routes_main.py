@@ -62,16 +62,16 @@ def profile():
 
         # Enviar correo electrónico de bienvenida con el enlace de verificació
 
-            if not current_user.verified:
+        if not current_user.verified:
                 # envio l'email!
-                mail_manager.send_register_email(current_user.name, current_user.email, current_user.email_token)
+                    mail_manager.send_register_email(current_user.name, current_user.email, current_user.email_token)
 
-                # logout
-                logout_user()
-                flash("Revisa el teu correu per verificar-lo", "success")
-                return redirect(url_for("auth_bp.login"))
+                    # logout
+                    logout_user()
+                    flash("Revisa el teu correu per verificar-lo", "success")
+                    return redirect(url_for("auth_bp.login"))
 
-            flash("Perfil actualitzat correctament", "success")
+        flash("Perfil actualitzat correctament", "success")
             
         return redirect(url_for('main_bp.profile'))
     else:

@@ -7,6 +7,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 from logging.handlers import RotatingFileHandler
 import logging
 
+db = SQLAlchemy()
+
 db_manager = SQLAlchemy()
 login_manager = LoginManager()
 principal_manager = Principal()

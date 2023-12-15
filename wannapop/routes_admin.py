@@ -1,10 +1,13 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 from flask_login import current_user
-from .models import User
+from .models import User, BlockedUser
 from .helper_role import Role, role_required
 from . import db_manager as db
 from .forms import BlockedUserForm
-from .models import BlockedUser
+from flask import Blueprint, abort, request, jsonify
+from flask_login import login_required, current_user
+from .models import BannedProduct, Product
+from . import db
 
 # Blueprint
 admin_bp = Blueprint("admin_bp", __name__)
@@ -54,3 +57,36 @@ def unblock_user(user_id):
 
         flash(f"[{user.user_id}] Usuari desbloquejat", "success")
         return redirect(url_for('admin_bp.admin_users'))
+
+@admin_bp.route('/products/<int:product_id>/ban', methods=['POST'])
+@login_required
+def ban_product(product_id):
+    if current_user.role != 'moderator':
+        abort(403)  
+
+    product = Product.query.get_or_404(product_id)
+
+    banned_product = BannedProduct.query.filter_by(product_id=product.id).first()
+    if not banned_product:
+        banned_product = BannedProduct(product=product)
+
+    banned_product.reason = request.form.get('reason')
+    db.session.add(banned_product)
+    db.session.commit()
+
+    return jsonify({'message': 'Product banned successfully'})
+
+@admin_bp.route('/products/<int:product_id>/unban', methods=['POST'])
+@login_required
+def unban_product(product_id):
+    if current_user.role != 'moderator':
+        abort(403)  # Forbid access if not a moderator
+
+    product = Product.query.get_or_404(product_id)
+
+    banned_product = BannedProduct.query.filter_by(product_id=product.id).first()
+    if banned_product:
+        db.session.delete(banned_product)
+        db.session.commit()
+
+    return jsonify({'message': 'Product unbanned successfully'})

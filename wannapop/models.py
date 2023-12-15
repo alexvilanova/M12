@@ -4,6 +4,12 @@ from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import relationship
+
+db = SQLAlchemy()
+
 class User(UserMixin, db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
@@ -81,6 +87,9 @@ class Product(db.Model):
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    banned = db.relationship('BannedProduct', backref='product', uselist=False)
+    banned_id = db.Column(db.Integer, ForeignKey('banned_product.id'))
+
 
 class Category(db.Model):
     __tablename__ = "categories"
@@ -104,6 +113,11 @@ class BlockedUser(db.Model):
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
 
+class BannedProduct(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    reason = db.Column(db.Text)
+   
 
     def get_id(self):
         return self.email
