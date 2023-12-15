@@ -26,7 +26,6 @@ def product_list():
     user_blocked = BlockedUser.query.filter_by(user_id=current_user.id).first()
     # select amb join que retorna una llista de resultats
     products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
-    current_app.logger.debug(f"products_with_category = {products_with_category}")
 
     return render_template('products/list.html', products_with_category = products_with_category, user_blocked = user_blocked)
 

@@ -19,7 +19,6 @@ def admin_index():
 def admin_users():
     users = db.session.query(User).all()
     blocked_users = [user.user_id for user in db.session.query(BlockedUser).all()]
-    current_app.logger.debug(blocked_users)
     return render_template('admin/users_list.html', users=users, blocked_users = blocked_users)
 
 @admin_bp.route('/admin/users/block', methods=['GET', 'POST'])
@@ -41,7 +40,7 @@ def block_user():
         # insert!
         db.session.add(new_blockeduser)
         db.session.commit()
-        flash("Usuari bloquejat", "success")
+        flash(f"[{new_blockeduser.user_id}] Usuari bloquejat", "success")
         return redirect(url_for('admin_bp.admin_users'))
     return render_template('admin/block_user.html', form=form)
 
@@ -53,5 +52,5 @@ def unblock_user(user_id):
         db.session.delete(user)
         db.session.commit()
 
-        flash("Usuari desbloquejat", "success")
+        flash(f"[{user.user_id}] Usuari desbloquejat", "success")
         return redirect(url_for('admin_bp.admin_users'))

@@ -20,3 +20,5 @@ class Config:
     MAIL_SMTP_PORT = int(environ.get('MAIL_SMTP_PORT'))
 
     EXTERNAL_URL = environ.get('EXTERNAL_URL')
+    
+    LOG_LEVEL = environ.get('LOG_LEVEL', 'DEBUG').upper()
