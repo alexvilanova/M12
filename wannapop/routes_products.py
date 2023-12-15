@@ -21,11 +21,14 @@ def templates_processor():
 @products_bp.route('/products/list')
 @perm_required(Action.products_list)
 def product_list():
+
+    # verifica si el usuario actual esta bloqueado
+    user_blocked = BlockedUser.query.filter_by(user_id=current_user.id).first()
     # select amb join que retorna una llista de resultats
     products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
     current_app.logger.debug(f"products_with_category = {products_with_category}")
 
-    return render_template('products/list.html', products_with_category = products_with_category)
+    return render_template('products/list.html', products_with_category = products_with_category, user_blocked = user_blocked)
 
 @products_bp.route('/products/create', methods = ['POST', 'GET'])
 @perm_required(Action.products_create)

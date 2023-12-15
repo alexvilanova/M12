@@ -39,7 +39,7 @@ Productes
 		{% endfor %}
 	</tbody>
 </table>
-{% if current_user.is_action_allowed_to_product(Action.products_create) %}
+{% if not user_blocked and current_user.is_action_allowed_to_product(Action.products_create) %}
 <a class="btn btn-secondary btn-xl" href="/products/create">Crear un nou producte</a>
 {% endif %}
 {% endblock %}
