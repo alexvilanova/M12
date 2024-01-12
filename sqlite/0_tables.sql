@@ -49,3 +49,11 @@ CREATE TABLE blocked_users (
     message VARCHAR(255) NOT NULL,
     created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Crea la taula banned_products
+CREATE TABLE banned_products (
+	product_id INTEGER PRIMARY KEY,
+	reason TEXT NOT NULL,
+	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
+	FOREIGN KEY (product_id) REFERENCES products(id)
+);

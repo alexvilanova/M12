@@ -1,0 +1,22 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Producte {{ product.id }}
+{% endblock %}
+
+{% block content %}
+
+<p>Confirmes que vols prohibir el producte "{{ product.title }}"?</p>
+
+<form action="/admin/products/{{ product.id }}/ban" method="POST">
+    {{ form.csrf_token }}
+    <div class="form-floating mb-3">
+        {{ form.reason(class_="form-control") }}
+        {{ form.reason.label }}
+     </div>
+    <a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
+    {{ form.submit(value="PROHIBIR",class_="btn btn-danger btn-xl") }}
+    {{ render_errors(form) }}
+</form>
+{% endblock %}

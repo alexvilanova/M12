@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort, current_app
 from flask_login import current_user
 from werkzeug.utils import secure_filename
-from .models import Product, Category, Status, BlockedUser
+from .models import Product, Category, Status, BlockedUser, BannedProduct
 from .forms import ProductForm, DeleteForm
 from .helper_role import Action, perm_required
 from . import db_manager as db
@@ -25,7 +25,7 @@ def product_list():
     # verifica si el usuario actual esta bloqueado
     user_blocked = BlockedUser.query.filter_by(user_id=current_user.id).first()
     # select amb join que retorna una llista de resultats
-    products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
+    products_with_category = db.session.query(Product, Category, BannedProduct ).join(Category).outerjoin(BannedProduct).order_by(Product.id.asc()).all()
 
     return render_template('products/list.html', products_with_category = products_with_category, user_blocked = user_blocked)
 
