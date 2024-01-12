@@ -5,6 +5,8 @@ from flask_principal import Principal
 from .helper_mail import MailManager
 from flask_debugtoolbar import DebugToolbarExtension
 from logging.handlers import RotatingFileHandler
+from werkzeug.local import LocalProxy
+
 import logging
 
 db_manager = SQLAlchemy()
@@ -12,6 +14,7 @@ login_manager = LoginManager()
 principal_manager = Principal()
 mail_manager = MailManager()
 toolbar = DebugToolbarExtension()
+logger = LocalProxy(lambda: current_app.logger)
 
 
 
@@ -30,17 +33,12 @@ def create_app():
     log_handler.setLevel(logging.DEBUG)
     app.logger.addHandler(log_handler)
 
-    log_level = app.config.get('LOG_LEVEL')
-    if log_level not in ['DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL']:
-       raise ValueError('Nivell de registre no vàlid')
-    app.logger.setLevel(getattr(logging, log_level))
-
     # Inicialitza els plugins
     login_manager.init_app(app)
     db_manager.init_app(app)
     principal_manager.init_app(app)
     mail_manager.init_app(app)
-    toolbar.init_app(app) # the toolbar is only enabled in debug mode
+   #  toolbar.init_app(app) desactivamos debugbar
 
 
     with app.app_context():
