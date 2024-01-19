@@ -49,3 +49,20 @@ CREATE TABLE blocked_users (
     message VARCHAR(255) NOT NULL,
     created DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE orders (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	product_id INTEGER,
+	buyer_id INTEGER,
+	offer DECIMAL(10, 2),
+	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
+	CONSTRAINT uc_product_buyer UNIQUE (product_id, buyer_id),
+	FOREIGN KEY (product_id) REFERENCES products(id),
+	FOREIGN KEY (buyer_id) REFERENCES users(id)
+);
+
+CREATE TABLE confirmed_orders (
+	order_id INTEGER PRIMARY KEY,
+	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
+	FOREIGN KEY (order_id) REFERENCES orders(id)
+);

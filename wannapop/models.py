@@ -3,9 +3,9 @@ from . import db_manager as db
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import check_password_hash, generate_password_hash
-from .mixins import BaseMixin
+from .mixins import BaseMixin, SerializableMixin
 
-class User(UserMixin, db.Model, BaseMixin):
+class User(UserMixin, db.Model, BaseMixin, SerializableMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
@@ -69,7 +69,7 @@ class User(UserMixin, db.Model, BaseMixin):
         # si hem arribat fins aquí, l'usuari té permisos
         return True
 
-class Product(db.Model):
+class Product(db.Model, BaseMixin, SerializableMixin):
     __tablename__ = "products"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
@@ -88,13 +88,13 @@ class Category(db.Model):
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, nullable=False)
 
-class Status(db.Model):
+class Status(db.Model, BaseMixin, SerializableMixin):
     __tablename__ = "statuses"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, nullable=False)
 
-class BlockedUser(db.Model, BaseMixin):
+class BlockedUser(db.Model, BaseMixin, SerializableMixin):
     __tablename__ = 'blocked_users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -102,3 +102,21 @@ class BlockedUser(db.Model, BaseMixin):
     admin_id = db.Column(db.Integer, nullable=False)
     message = db.Column(db.String(255), nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
+
+class Order(db.Model, BaseMixin, SerializableMixin):
+    __tablename__ = 'orders'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    buyer_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    offer = db.Column(db.Numeric(precision=10, scale=2))
+    created = db.Column(db.DateTime, server_default=func.now())
+
+    # product = db.relationship('Product', backref='orders')
+    # buyer = db.relationship('User', backref='orders')
+
+class ConfirmedOrder(db.Model):
+    __tablename__ = 'confirmed_orders'
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
+    created = db.Column(db.DateTime, server_default=func.now())
+
+    # order = db.relationship('Order', backref=db.backref('confirmed_order', uselist=False))
