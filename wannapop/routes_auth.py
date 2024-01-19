@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, url_for, render_template, flash
+from flask import Blueprint, redirect, url_for, render_template, flash, current_app
 from flask_login import current_user, login_required, login_user, logout_user
 from . import db_manager as db, login_manager, mail_manager
 from .forms import LoginForm, RegisterForm, ResendForm
@@ -61,8 +61,7 @@ def register():
         new_user.email_token = secrets.token_urlsafe(20)
 
         # insert!
-        db.session.add(new_user)
-        db.session.commit()
+        new_user.add()
 
         # envio l'email!
         mail_manager.send_register_email(new_user.name, new_user.email, new_user.email_token)
@@ -74,7 +73,8 @@ def register():
 
 @auth_bp.route("/verify/<name>/<token>")
 def verify(name, token):
-    user = db.session.query(User).filter(User.name == name).one_or_none()
+    user = User.get_filtered_by(name=name)
+
     if user and user.email_token == token:
         user.verified = True
         user.email_token = None # esborro el token perquè ja no serveix
@@ -93,7 +93,7 @@ def resend():
     form = ResendForm()
     if form.validate_on_submit():
         email = form.email.data
-        user = db.session.query(User).filter(User.email == email).one_or_none()
+        user = User.get_filtered_by(email=email)
         if user:
             if user.verified:
                 flash("Aquest compte ja està verificat", "error")
@@ -117,7 +117,8 @@ def logout():
 def load_user(email):
     if email is not None:
         # Un resultat o None
-        return db.session.query(User).filter(User.email == email).one_or_none()
+        return User.get_filtered_by(email=email)
+
     return None
 
 @login_manager.unauthorized_handler

@@ -25,7 +25,7 @@ def product_list():
     # verifica si el usuario actual esta bloqueado
     user_blocked = BlockedUser.query.filter_by(user_id=current_user.id).first()
     # select amb join que retorna una llista de resultats
-    products_with_category = db.session.query(Product, Category, BannedProduct ).join(Category).outerjoin(BannedProduct).order_by(Product.id.asc()).all()
+    products_with_category = Product.get_all_with_outerjoin()
 
     return render_template('products/list.html', products_with_category = products_with_category, user_blocked = user_blocked)
 
@@ -35,9 +35,9 @@ def product_create():
     blocked_user = BlockedUser.query.filter_by(user_id=current_user.id).first()
     if not blocked_user:
         # selects que retornen una llista de resultats
-        categories = db.session.query(Category).order_by(Category.id.asc()).all()
-        statuses = db.session.query(Status).order_by(Status.id.asc()).all()
-
+        
+        categories = Category.get_all_with(Category)
+        statuses = Status.get_all_with(Status)
         # carrego el formulari amb l'objecte products
         form = ProductForm()
         form.category_id.choices = [(category.id, category.name) for category in categories]
@@ -58,8 +58,7 @@ def product_create():
                 new_product.photo = "no_image.png"
 
             # insert!
-            db.session.add(new_product)
-            db.session.commit()
+            new_product.add()
 
             # https://en.wikipedia.org/wiki/Post/Redirect/Get
             flash("Nou producte creat", "success")
@@ -74,7 +73,7 @@ def product_create():
 @perm_required(Action.products_read)
 def product_read(product_id):
     # select amb join i 1 resultat
-    result = db.session.query(Product, Category, Status).join(Category).join(Status).filter(Product.id == product_id).one_or_none()
+    result = Product.get_filtered_by()
 
     if not result:
         abort(404)
@@ -86,7 +85,7 @@ def product_read(product_id):
 @perm_required(Action.products_update)
 def product_update(product_id):
     # select amb 1 resultat
-    product = db.session.query(Product).filter(Product.id == product_id).one_or_none()
+    product = Product.get_filtered_by()
     
     if not product:
         abort(404)
@@ -95,8 +94,8 @@ def product_update(product_id):
         abort(403)
 
     # selects que retornen una llista de resultats
-    categories = db.session.query(Category).order_by(Category.id.asc()).all()
-    statuses = db.session.query(Status).order_by(Status.id.asc()).all()
+    categories = Category.get_all_with()
+    statuses = Status.get_all_with()
 
     # carrego el formulari amb l'objecte products
     form = ProductForm(obj = product)
@@ -113,8 +112,7 @@ def product_update(product_id):
             product.photo = filename
 
         # update!
-        db.session.add(product)
-        db.session.commit()
+        product.add()
 
         # https://en.wikipedia.org/wiki/Post/Redirect/Get
         flash("Producte actualitzat", "success")
@@ -126,7 +124,7 @@ def product_update(product_id):
 @perm_required(Action.products_delete)
 def product_delete(product_id):
     # select amb 1 resultat
-    product = db.session.query(Product).filter(Product.id == product_id).one_or_none()
+    product = Product.get_filtered_by(Product)
 
     if not product:
         abort(404)
@@ -137,8 +135,7 @@ def product_delete(product_id):
     form = DeleteForm()
     if form.validate_on_submit(): # si s'ha fet submit al formulari
         # delete!
-        db.session.delete(product)
-        db.session.commit()
+        product.remove()
 
         flash("Producte esborrat", "success")
         return redirect(url_for('products_bp.product_list'))

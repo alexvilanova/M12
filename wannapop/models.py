@@ -3,8 +3,9 @@ from . import db_manager as db
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import check_password_hash, generate_password_hash
+from .mixins import BaseMixin
 
-class User(UserMixin, db.Model):
+class User(UserMixin, db.Model, BaseMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, unique=True, nullable=False)
@@ -80,6 +81,7 @@ class Product(db.Model):
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    
 
 class Category(db.Model):
     __tablename__ = "categories"
@@ -93,7 +95,7 @@ class Status(db.Model):
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, nullable=False)
 
-class BlockedUser(db.Model):
+class BlockedUser(db.Model, BaseMixin):
     __tablename__ = 'blocked_users'
 
     id = db.Column(db.Integer, primary_key=True)

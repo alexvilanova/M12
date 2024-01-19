@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, abort, redirect, url_for, flash, current_app
 from flask_login import current_user
-from .models import User
+from .models import User, BlockedUser
 from .helper_role import Role, role_required
 from . import db_manager as db
 from .forms import ConfirmForm, BlockedUserForm, BanProductForm
@@ -17,8 +17,8 @@ def admin_index():
 @admin_bp.route('/admin/users')
 @role_required(Role.admin)
 def admin_users():
-    users = db.session.query(User).all()
-    blocked_users = [user.user_id for user in db.session.query(BlockedUser).all()]
+    users = User.get_all()
+    blocked_users = [user.user_id for user in BlockedUser.get_all()]
     return render_template('admin/users_list.html', users=users, blocked_users = blocked_users)
 
 @admin_bp.route('/admin/users/block', methods=['GET', 'POST'])
@@ -38,8 +38,8 @@ def block_user():
         form.populate_obj(new_blockeduser)
 
         # insert!
-        db.session.add(new_blockeduser)
-        db.session.commit()
+        new_blockeduser.add()
+
         flash(f"[{new_blockeduser.user_id}] Usuari bloquejat", "success")
         return redirect(url_for('admin_bp.admin_users'))
     return render_template('admin/block_user.html', form=form)
@@ -47,18 +47,16 @@ def block_user():
 @admin_bp.route('/admin/users/<int:user_id>/unblock', methods = ['POST', 'GET'])
 @role_required(Role.admin)
 def unblock_user(user_id):
-        user = db.session.query(BlockedUser).filter(BlockedUser.user_id == user_id).one_or_none()
+        user = BlockedUser.get_filtered_by(user_id=user_id)
+        user.remove()
         
-        db.session.delete(user)
-        db.session.commit()
-
         flash(f"[{user.user_id}] Usuari desbloquejat", "success")
         return redirect(url_for('admin_bp.admin_users'))
 
 @admin_bp.route('/admin/products/<int:product_id>/ban', methods=["GET", "POST"])
 @role_required(Role.moderator)
 def ban_product(product_id):
-    result = db.session.query(Product, BannedProduct).outerjoin(BannedProduct).filter(Product.id == product_id).one_or_none()
+    result = Product.get_all_with_outerjoin(BannedProduct)
     if not result:
         abort(404)
     
@@ -76,8 +74,7 @@ def ban_product(product_id):
         # carregar dades del formulari
         form.populate_obj(new_banned)
         # insert!
-        db.session.add(new_banned)
-        db.session.commit()
+        new_banned.add()
         # retornar al llistat
         flash("Producte prohibit", "success")
         return redirect(url_for('products_bp.product_list'))
@@ -87,7 +84,7 @@ def ban_product(product_id):
 @admin_bp.route('/admin/products/<int:product_id>/unban', methods=["GET", "POST"])
 @role_required(Role.moderator)
 def unban_product(product_id):
-    result = db.session.query(Product, BannedProduct).outerjoin(BannedProduct).filter(Product.id == product_id).one_or_none()
+    result = Product.get_all_with_outerjoin()
     if not result:
         abort(404)
     
@@ -99,8 +96,7 @@ def unban_product(product_id):
     
     form = ConfirmForm()
     if form.validate_on_submit():
-        db.session.delete(banned)
-        db.session.commit()
+        banned.remove()
         flash("Producte permès", "success")
         return redirect(url_for('products_bp.product_list'))
 
