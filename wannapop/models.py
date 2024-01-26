@@ -1,9 +1,16 @@
 from flask_login import UserMixin
+from flask import url_for
 from . import db_manager as db
 from sqlalchemy.sql import func
 from sqlalchemy.ext.hybrid import hybrid_property
 from werkzeug.security import check_password_hash, generate_password_hash
 from .mixins import BaseMixin, SerializableMixin
+from typing import Optional
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
+
+import secrets
 
 class User(UserMixin, db.Model, BaseMixin, SerializableMixin):
     __tablename__ = "users"
@@ -16,6 +23,9 @@ class User(UserMixin, db.Model, BaseMixin, SerializableMixin):
     email_token = db.Column(db.String, nullable=True, server_default=None)
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    token: db.Mapped[Optional[str]] = db.mapped_column(
+        db.String(32), index=True, unique=True)
+    token_expiration: db.Mapped[Optional[datetime]]
 
     def get_id(self):
         return self.email
@@ -68,6 +78,29 @@ class User(UserMixin, db.Model, BaseMixin, SerializableMixin):
         
         # si hem arribat fins aquí, l'usuari té permisos
         return True
+
+   
+    def get_token(self, expires_in=3600):
+        now = datetime.now(timezone.utc)
+        if self.token and self.token_expiration.replace(
+                tzinfo=timezone.utc) > now + timedelta(seconds=60):
+            return self.token
+        self.token = secrets.token_hex(16)
+        self.token_expiration = now + timedelta(seconds=expires_in)
+        db.session.add(self)
+        return self.token
+
+    def revoke_token(self):
+        self.token_expiration = datetime.now(timezone.utc) - timedelta(
+            seconds=1)
+
+    @staticmethod
+    def check_token(token):
+        user = db.session.scalar(db.select(User).where(User.token == token))
+        if user is None or user.token_expiration.replace(
+                tzinfo=timezone.utc) < datetime.now(timezone.utc):
+            return None
+        return user
 
 class Product(db.Model, BaseMixin, SerializableMixin):
     __tablename__ = "products"
