@@ -114,7 +114,7 @@ class Order(db.Model, BaseMixin, SerializableMixin):
     # product = db.relationship('Product', backref='orders')
     # buyer = db.relationship('User', backref='orders')
 
-class ConfirmedOrder(db.Model):
+class ConfirmedOrder(db.Model, BaseMixin, SerializableMixin):
     __tablename__ = 'confirmed_orders'
     order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
     created = db.Column(db.DateTime, server_default=func.now())
