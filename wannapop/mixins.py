@@ -37,7 +37,14 @@ class BaseMixin():
     def db_query(cls, *args):
         return db.session.query(cls, *args)
 
-
+    @classmethod
+    def get_all_with(cls, join_cls):
+        return cls.db_query_with(join_cls).order_by(cls.id.asc()).all()
+    
+    @classmethod
+    def get_all_with_outerjoin(cls, outer_join_cls, **kwargs):
+        return db.session.query(outer_join_cls).filter_by(**kwargs).one_or_none()
+    
 
 from collections import OrderedDict
 from sqlalchemy.engine.row import Row
@@ -75,3 +82,4 @@ class SerializableMixin():
                 # only model
                 result.append(x.to_dict())
         return result
+    

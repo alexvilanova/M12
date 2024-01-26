@@ -88,3 +88,13 @@ class BlockedUserForm(FlaskForm):
 # Formulari generic per esborrar i aprofitar la CSRF Protection
 class DeleteForm(FlaskForm):
     submit = SubmitField()
+
+class BanProductForm(FlaskForm):
+    reason = StringField(
+        validators = [DataRequired()]
+    )
+    submit = SubmitField()
+
+# Formulari generic per a confirmar una acció
+class ConfirmForm(FlaskForm):
+    submit = SubmitField()

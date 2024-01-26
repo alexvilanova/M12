@@ -1,0 +1,18 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Producte {{ product.id }}
+{% endblock %}
+
+{% block content %}
+
+<p>Confirmes que vols permetre el producte "{{ product.title }}"?</p>
+
+<form action="/admin/products/{{ product.id }}/unban" method="POST">
+    {{ form.csrf_token }}
+    <a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
+    {{ form.submit(value="PERMETRE",class_="btn btn-danger btn-xl") }}
+    {{ render_errors(form) }}
+</form>
+{% endblock %}

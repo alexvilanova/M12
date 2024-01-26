@@ -1,9 +1,10 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, abort, redirect, url_for, flash, current_app
 from flask_login import current_user
 from .models import User, BlockedUser
 from .helper_role import Role, role_required
 from . import db_manager as db
-from .forms import BlockedUserForm
+from .forms import ConfirmForm, BlockedUserForm, BanProductForm
+from .models import User, BlockedUser, Product, BannedProduct
 
 # Blueprint
 admin_bp = Blueprint("admin_bp", __name__)
@@ -51,3 +52,53 @@ def unblock_user(user_id):
         
         flash(f"[{user.user_id}] Usuari desbloquejat", "success")
         return redirect(url_for('admin_bp.admin_users'))
+
+@admin_bp.route('/admin/products/<int:product_id>/ban', methods=["GET", "POST"])
+@role_required(Role.moderator)
+def ban_product(product_id):
+    result = Product.get_all_with_outerjoin(BannedProduct)
+    if not result:
+        abort(404)
+    
+    (product, banned) = result
+
+    if banned:
+        flash("Producte ja prohibit", "error")
+        return redirect(url_for('products_bp.product_list'))
+
+    form = BanProductForm()
+    if form.validate_on_submit():
+        new_banned = BannedProduct();
+        # carregar dades de la URL
+        new_banned.product_id = product.id
+        # carregar dades del formulari
+        form.populate_obj(new_banned)
+        # insert!
+        new_banned.add()
+        # retornar al llistat
+        flash("Producte prohibit", "success")
+        return redirect(url_for('products_bp.product_list'))
+
+    return render_template('admin/products/ban.html', product=product, form=form)
+
+@admin_bp.route('/admin/products/<int:product_id>/unban', methods=["GET", "POST"])
+@role_required(Role.moderator)
+def unban_product(product_id):
+    result = Product.get_all_with_outerjoin()
+    if not result:
+        abort(404)
+    
+    (product, banned) = result
+    
+    if not banned:
+        flash("Producte no prohibit", "error")
+        return redirect(url_for('products_bp.product_list'))
+    
+    form = ConfirmForm()
+    if form.validate_on_submit():
+        banned.remove()
+        flash("Producte permès", "success")
+        return redirect(url_for('products_bp.product_list'))
+
+    return render_template('admin/products/unban.html', product=product, form=form)
+

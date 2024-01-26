@@ -66,3 +66,10 @@ CREATE TABLE confirmed_orders (
 	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
 	FOREIGN KEY (order_id) REFERENCES orders(id)
 );
+-- Crea la taula banned_products
+CREATE TABLE banned_products (
+	product_id INTEGER PRIMARY KEY,
+	reason TEXT NOT NULL,
+	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
+	FOREIGN KEY (product_id) REFERENCES products(id)
+);

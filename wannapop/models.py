@@ -81,6 +81,7 @@ class Product(db.Model, BaseMixin, SerializableMixin):
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    
 
 class Category(db.Model):
     __tablename__ = "categories"
@@ -101,6 +102,12 @@ class BlockedUser(db.Model, BaseMixin, SerializableMixin):
     user_id = db.Column(db.Integer, nullable=False)
     admin_id = db.Column(db.Integer, nullable=False)
     message = db.Column(db.String(255), nullable=False)
+    created = db.Column(db.DateTime, server_default=func.now())
+
+class BannedProduct(db.Model):
+    __tablename__ = "banned_products"
+    product_id = db.Column(db.Integer, db.ForeignKey("products.id"), primary_key=True)
+    reason = db.Column(db.String, nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
 
 class Order(db.Model, BaseMixin, SerializableMixin):
