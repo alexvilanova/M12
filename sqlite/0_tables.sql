@@ -22,7 +22,8 @@ CREATE TABLE users (
 	verified INTEGER NOT NULL DEFAULT FALSE, -- SQLite no té booleans
 	created DATETIME NOT NULL DEFAULT (DATETIME('now')),
 	updated DATETIME NOT NULL DEFAULT (DATETIME('now')),
-	token VARCHAR(32) UNIQUE INDEX
+	token VARCHAR(32) UNIQUE INDEX,
+	token_expiration DATETIME DEFAULT NULL
 
 );
 
