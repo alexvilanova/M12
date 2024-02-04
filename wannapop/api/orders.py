@@ -10,7 +10,8 @@ from .auth import token_auth
 @token_auth.login_required
 def order_product():
     try:
-        data = json_request(['product_id', 'buyer_id', 'offer'])
+        data = json_request(['product_id', 'offer'])
+        data['buyer_id'] = token_auth.current_user().id
     except Exception as e:
         current_app.logger.debug(e)
         return bad_request(str(e))
