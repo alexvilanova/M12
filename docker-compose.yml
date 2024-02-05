@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+
+  mysql:
+    image: mysql:8.0.36
+    restart: always
+    environment:
+      MYSQL_USER: alex
+      MYSQL_PASSWORD: patata
+      MYSQL_DATABASE: userdb
+      MYSQL_ROOT_PASSWORD: patata
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+      - mysql_volume:/var/lib/mysql
+    ports:
+      - 127.0.0.1:3306:3306
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8081:80
+      
+volumes:
+  mysql_volume:
