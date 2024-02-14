@@ -2,6 +2,20 @@ version: '3.1'
 
 services:
 
+  flask:
+    build:
+      context: .
+      dockerfile: flask.Dockerfile
+    command: gunicorn -w 4 --bind 0.0.0.0:5000 wsgi:app
+    env_file:
+      - ./.env
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 127.0.0.1:5000:5000
+    depends_on:
+      - mysql
+
   mysql:
     image: mysql:8.0.36
     restart: always
