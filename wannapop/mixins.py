@@ -37,6 +37,7 @@ class BaseMixin():
     def db_query(cls, *args):
         return db.session.query(cls, *args)
 
+    
     @classmethod
     def get_all_with(cls, join_cls):
         return cls.db_query_with(join_cls).order_by(cls.id.asc()).all()
