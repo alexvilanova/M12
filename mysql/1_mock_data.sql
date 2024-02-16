@@ -27,13 +27,13 @@ INSERT INTO users (name, email, role, verified, password) VALUES
 INSERT INTO products (title, description, photo, price, category_id, status_id, seller_id) VALUES
 ('Telefono movil', 'Un telefono inteligente de ultima generacion.', 'no_image.png', 599.99, 1, 1, 3),
 ('Camiseta', 'Una camiseta de algodon de color azul.', 'no_image.png', 19.99, 2, 1, 3),
-('Muñeco de peluche', 'Un muñeco de peluche suave.', 'no_image.png', 9.99, 3, 1, 4);
+('Muneco de peluche', 'Un muñeco de peluche suave.', 'no_image.png', 9.99, 3, 1, 4);
 
 -- Insertar datos ficticios en la tabla orders
 INSERT INTO orders (product_id, buyer_id, offer) VALUES
 (1, 2, 500.00),
 (2, 1, 18.00),
-(3, 3, 10.00),
+(3, 3, 10.00);
 
 -- Insertar datos ficticios en la tabla confirmed_orders
 INSERT INTO confirmed_orders (order_id) VALUES

@@ -1,3 +1,4 @@
+
 -- Crear la taula categories
 CREATE TABLE categories (
 	id INT AUTO_INCREMENT PRIMARY KEY,

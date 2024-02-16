@@ -4,11 +4,11 @@ services:
 
   mysql:
     image: mysql:8.0.36
-    restart: always
+    restart: no
     environment:
       MYSQL_USER: alex
       MYSQL_PASSWORD: patata
-      MYSQL_DATABASE: userdb
+      MYSQL_DATABASE: flask_db
       MYSQL_ROOT_PASSWORD: patata
     volumes:
       - ./mysql:/docker-entrypoint-initdb.d
@@ -36,7 +36,7 @@ services:
       - ./.env
     volumes:
       - .:/usr/src/flask
-      - ./.env.prod:/usr/src/flask/.env
+      - ./.env:/usr/src/flask/.env
     depends_on:
       - mysql
 
