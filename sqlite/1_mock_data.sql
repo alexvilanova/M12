@@ -1,3 +1,11 @@
+-- Eliminar datos actuales
+DELETE FROM confirmed_orders;
+DELETE FROM orders;
+DELETE FROM products;
+DELETE FROM users;
+DELETE FROM categories;
+DELETE FROM statuses;
+
 INSERT INTO statuses (id, name, slug) VALUES
 (1, 'Nou', 'nou');
 UPDATE SQLITE_SEQUENCE SET seq = 1 WHERE name = 'statuses';
@@ -22,3 +30,17 @@ INSERT INTO products (id, title, description, photo, price, category_id, status_
 (2, 'Samarreta', 'Una samarreta de cotó de color blau.', 'no_image.png', 19.99, 2, 1, 3),
 (3, 'Ninot de peluix', 'Un ninot de peluix suau.', 'no_image.png', 9.99, 3, 1, 4);
 UPDATE SQLITE_SEQUENCE SET seq = 3 WHERE name = 'products';
+
+-- Inserir dades fictícies a la taula orders
+INSERT INTO orders (id, product_id, buyer_id, offer) VALUES
+(1, 1, 2, 500.00),
+(2, 2, 1, 18.00),
+(3, 3, 3, 10.00),
+(4, 3, 1, 12.00),
+(5, 3, 2, 11.00);
+UPDATE SQLITE_SEQUENCE SET seq = 5 WHERE name = 'orders';
+
+-- Inserir dades fictícies a la taula confirmed_orders
+INSERT INTO confirmed_orders (order_id) VALUES
+(1);
+UPDATE SQLITE_SEQUENCE SET seq = 1 WHERE name = 'confirmed_orders';

@@ -26,9 +26,11 @@ Per desactivar l'entorn:
 
     deactivate
 
+
 ### Base de dades
 
 Crea una base de dades SQLite a partir de l'script [0_tables.sql](./sqlite/0_tables.sql). Tens una d'exemple creada amb les dades del fitxer [1_mock_data.sql](./sqlite/1_mock_data.sql). Hi ha tres usuaris de prova (un `admin` i dos `wanner`) i tots tres tenen com a contrasenya `patata`.
+
 
 ### Fitxer de configuració
 
@@ -73,4 +75,34 @@ Des de l'opció de `Run and Debug`, crea un fitxer anomenat `launch.json` amb el
         }
     ]
 }
+
 ```
+### Desplegament Dockeritzat
+
+1. Crea un fitxer `.env` a partir del `.env.exemple` i omple'l amb els següents paràmetres per a utilitzar la base de dades dockeritzada:
+
+    ```
+    DB_TYPE="mysql"
+    DB_HOST="mysql"
+    DB_PORT="3306"
+    DB_USER="alex"
+    DB_PASSWORD="patata"
+    DB_NAME="alexdb"
+    ```
+
+2. Verifica que els scripts sql tenen permisos d'execució:
+
+    ```bash
+    chmod +x mysql/*
+    ```
+
+3. Desplega l'aplicació amb Docker Compose:
+
+    ```bash
+    docker compose -f "docker-compose.yml" up -d --build 
+    ```
+
+4. Per a manejar la BD MySQL amb phpMyAdmin, accedeix a: [http://127.0.0.1:8081/](http://127.0.0.1:8081/)
+
+5. Per provar wannapop, accedeix a : [http://127.0.0.1:8080/](http://127.0.0.1:8080/)
+

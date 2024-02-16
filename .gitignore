@@ -1,7 +1,8 @@
 .venv
 .env
+.env.prod
 .vscode
 __pycache__
 *.db-journal
 *.db
-app.log
+app.log*

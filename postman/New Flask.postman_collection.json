@@ -1,0 +1,571 @@
+{
+	"info": {
+		"_postman_id": "00f66c09-21e8-4d95-bb7f-7b05284bfc45",
+		"name": "New Flask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32448481",
+		"_collection_link": "https://lively-star-764425.postman.co/workspace/My-Workspace~b8462c0a-008e-4a3a-88e9-b146ebe251a3/collection/32448481-00f66c09-21e8-4d95-bb7f-7b05284bfc45?action=share&source=collection_link&creator=32448481"
+	},
+	"item": [
+		{
+			"name": "alex",
+			"item": [
+				{
+					"name": "Llistar estats disponibles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/statuses",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"statuses"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Llistar estat",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/statuses",
+									"host": [
+										"{{URL_ENDPOINT}}"
+									],
+									"path": [
+										"api",
+										"{{API_VERSION}}",
+										"statuses"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Llistar usuaris",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/users",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filtrar per nom",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/users?name=Anna García",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Anna García"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Veure el perfil públic d’un/a usuari/a",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/users/1",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Llistar els productes d’un/a usuari/a",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/users/3/products",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"users",
+								"3",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Fer una oferta per un producte",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.environment.set(\"id\", jsonData.data.id);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"product_id\": 1,\n    \"offer\": 10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/orders",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar l’oferta feta per un producte",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"offer\": 20\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/orders/{{id}}",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"orders",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Anul·lar l’oferta feta per un producte",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/orders/{{id}}",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"orders",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Create Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"token\", jsonData.data.token);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "{{email}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/tokens",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create token UNAUTHORIZED",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status UNAUTHORIZED\", function () {",
+							"    pm.response.to.be.unauthorized;",
+							"    pm.response.to.have.status(401)",
+							"})",
+							"",
+							"pm.test(\"JSON response\", function () {",
+							"    pm.response.to.be.json;",
+							"    pm.response.to.be.an(\"object\");",
+							"    pm.response.to.have.jsonBody(\"success\");",
+							"    pm.response.to.not.have.jsonBody(\"data\");",
+							"    pm.response.to.have.jsonBody(\"error\");",
+							"});",
+							"",
+							"pm.test(\"JSON response: success\", function () {",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(jsonResponse.success).to.be.a(\"boolean\");",
+							"    pm.expect(jsonResponse.success).to.eql(false);",
+							"});",
+							"",
+							"pm.test(\"JSON response: error\", function () {",
+							"    var jsonResponse = pm.response.json();",
+							"    pm.expect(jsonResponse.error).to.be.an(\"string\");",
+							"    pm.expect(jsonResponse.error).to.not.be.empty;",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/tokens",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"tokens"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create token UNAUTHORIZED",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/tokens",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"tokens"
+							]
+						}
+					},
+					"status": "UNAUTHORIZED",
+					"code": 401,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.3.7 Python/3.8.10"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 30 Jan 2024 08:17:40 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "50"
+						},
+						{
+							"key": "WWW-Authenticate",
+							"value": "Basic realm=\"Authentication Required\""
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"error\": \"Unauthorized\",\n    \"success\": false\n}"
+				}
+			]
+		},
+		{
+			"name": "Revoke token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status NO CONTENT\", function () {",
+							"    pm.response.to.have.status(204)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/tokens",
+					"host": [
+						"{{URL_ENDPOINT}}"
+					],
+					"path": [
+						"api",
+						"{{API_VERSION}}",
+						"tokens"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Revoke token",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_ENDPOINT}}/api/{{API_VERSION}}/tokens",
+							"host": [
+								"{{URL_ENDPOINT}}"
+							],
+							"path": [
+								"api",
+								"{{API_VERSION}}",
+								"tokens"
+							]
+						}
+					},
+					"status": "NO CONTENT",
+					"code": 204,
+					"_postman_previewlanguage": "html",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/2.3.7 Python/3.8.10"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 30 Jan 2024 09:25:54 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "text/html; charset=utf-8"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": ""
+				}
+			]
+		}
+	]
+}

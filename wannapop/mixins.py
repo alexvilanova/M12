@@ -2,6 +2,17 @@ from . import db_manager as db
 
 class BaseMixin():
 
+    @classmethod
+    def create(cls, **kwargs):
+        r = cls(**kwargs)
+        return r.add()
+
+    def update(self, **kwargs):
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+        return self.add()
+
     def add(self):
         try:
             db.session.add(self)
