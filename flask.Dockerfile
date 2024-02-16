@@ -1,14 +1,15 @@
-# Partim de la imatge oficial: https://hub.docker.com/_/python
-FROM python:3.9.18-bookworm
+# pull official base image
+FROM python:3.9.18-slim-bullseye
 
-# Definim el directori de treball
-WORKDIR /usr/src/app
+# set work directory
+WORKDIR /usr/src/flask
 
-# Definim les variables d'entorn
+# set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Instal·lem les dependències
+
+# install dependencies
 RUN pip install --upgrade pip
-COPY ./requirements.txt /usr/src/app/requirements.txt
+COPY ./requirements.txt /usr/src/flask/requirements.txt
 RUN pip install -r requirements.txt

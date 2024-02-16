@@ -6,7 +6,7 @@ cryptography==42.0.2
 dnspython==2.4.2
 email-validator==2.1.0.post1
 Flask==3.0.0
-Flask-DebugToolbar @ git+https://github.com/pallets-eco/flask-debugtoolbar.git@d0360218fd5f3dfe624299ba923d2cbed88e31be
+Flask-DebugToolbar==0.14.1
 Flask-HTTPAuth==4.8.0
 Flask-Login==0.6.3
 Flask-Principal==0.4.0
