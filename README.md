@@ -87,7 +87,7 @@ Des de l'opció de `Run and Debug`, crea un fitxer anomenat `launch.json` amb el
     DB_PORT="3306"
     DB_USER="alex"
     DB_PASSWORD="patata"
-    DB_NAME="alexdb"
+    DB_NAME="flask_db"
     ```
 
 2. Verifica que els scripts sql tenen permisos d'execució:
